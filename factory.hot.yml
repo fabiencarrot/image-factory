@@ -1,0 +1,73 @@
+heat_template_version: 2013-05-23
+
+
+description: Image Factory
+
+
+parameters:
+  keypair_name:
+    default: amaury-ext-compute
+    description: Keypair to inject in instances
+    type: string
+
+    
+resources:
+  dmz_net:
+    type: OS::Neutron::Net
+        
+  dmz_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: dmz_net }
+      ip_version: 4
+      cidr: 10.42.42.0/24
+      allocation_pools:
+        - { start: 10.42.42.100, end: 10.42.42.199 }
+
+  factory_sg:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+        - { direction: ingress, protocol: TCP, port_range_min: 22, port_range_max: 22 }
+        - { direction: ingress, protocol: TCP, port_range_min: 8080, port_range_max: 8080, remote_ip_prefix: 10.0.0.0/24 }
+        - { direction: egress, protocol: ICMP }
+        - { direction: egress, protocol: TCP }
+        - { direction: egress, protocol: UDP }
+
+  factory_realm_sg:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+        - { direction: ingress, protocol: TCP, port_range_min: 22, port_range_max: 22, remote_group_id: { get_resource: factory_sg } }
+    
+  factory_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network_id: 6ea98324-0f14-49f6-97c0-885d1b8dc517
+
+  factory_server:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: keypair_name }
+      image: 9d9140a8-9dbf-4027-89b2-59205b02d383
+      flavor: n1.cw.standard-2
+      networks:
+        - { get_resource: factory_dmz_subnet }
+      user_data_format: RAW
+      user_data: |
+            #!/bin/bash
+            apt-get update
+            apt-get upgrade -y
+            apt-get install aptitude git python-dev python-pip -y
+            pip install ansible
+            mkdir /etc/ansible
+            echo "[local]" > /etc/ansible/hosts
+            echo "127.0.0.1 ansible_connection=local" >> /etc/ansible/hosts
+            cd /root && git clone https://github.com/aurelienmaury/os-factory.git
+            /usr/local/bin/ansible-playbook /root/os-factory/ansible/setup.yml -vvv > /root/ansible-log 2>&1
+
+  factory_internet_surface:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: factory_ip }
+      server_id: { get_resource: factory_server }

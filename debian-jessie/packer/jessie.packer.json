@@ -1,0 +1,32 @@
+{
+    "builders": [
+        {
+            "type": "openstack",
+            "ssh_username": "cloud",
+            "image_name": "Jessie",
+            "source_image": "38ec83d2-b9d6-4d36-b55e-718942ec9516",
+            "use_floating_ip": "true",
+            "floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517",
+            "security_groups": ["PING_SSH"],
+            "networks": ["a27d058b-fa48-4d29-b874-c39b4f1c618c"],
+            "flavor": "16"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-add-repository ppa:ansible/ansible -y",
+                "sudo apt-get update",
+                "sudo apt-get install ansible -y"
+            ]
+        },
+        {
+            "type": "ansible-local",
+            "playbook_dir": "../ansible",
+            "playbook_file": "../ansible/jessie-bootstrap.yml",
+            "inventory_file": "../ansible/inventory"
+        }
+    ]
+}

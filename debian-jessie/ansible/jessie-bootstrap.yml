@@ -1,0 +1,20 @@
+- hosts: local
+  user: cloud
+  sudo: true
+
+  tasks:
+    - name: apt-get update & upgrade
+      apt:
+        upgrade=full
+        update_cache=yes
+        cache_valid_time=3600
+
+    - name: packages installed
+      apt:
+        pkg={{ item }}
+        state=present
+      with_items:
+        - haveged
+        - curl
+        - bzip2
+        - unzip
