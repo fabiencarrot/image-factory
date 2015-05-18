@@ -63,8 +63,8 @@ resources:
             mkdir /etc/ansible
             echo "[local]" > /etc/ansible/hosts
             echo "127.0.0.1 ansible_connection=local" >> /etc/ansible/hosts
-            cd /root && git clone https://github.com/aurelienmaury/os-factory.git
-            /usr/local/bin/ansible-playbook /root/os-factory/ansible/setup.yml -vvv > /root/ansible-log 2>&1
+            cd /root && git clone https://aurelien_maury@bitbucket.org/aurelien_maury/image-factory.git
+            /usr/local/bin/ansible-playbook /root/image-factory/ansible/setup-factory.yml -vvv > /root/setup-factory.playbook.log 2>&1
 
   factory_internet_surface:
     type: OS::Nova::FloatingIPAssociation
