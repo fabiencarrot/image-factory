@@ -29,7 +29,7 @@ resources:
     properties:
       rules:
         - { direction: ingress, protocol: TCP, port_range_min: 22, port_range_max: 22 }
-        - { direction: ingress, protocol: TCP, port_range_min: 8080, port_range_max: 8080, remote_ip_prefix: 10.0.0.0/24 }
+        - { direction: ingress, protocol: TCP, port_range_min: 8080, port_range_max: 8080 }
         - { direction: egress, protocol: ICMP }
         - { direction: egress, protocol: TCP }
         - { direction: egress, protocol: UDP }
@@ -52,7 +52,9 @@ resources:
       image: 9d9140a8-9dbf-4027-89b2-59205b02d383
       flavor: n1.cw.standard-2
       networks:
-        - { get_resource: factory_dmz_subnet }
+        - { network: { get_resource: dmz_net } }
+      security_groups:
+        - { get_resource: factory_sg }
       user_data_format: RAW
       user_data: |
             #!/bin/bash
