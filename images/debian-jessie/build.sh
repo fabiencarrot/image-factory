@@ -41,4 +41,12 @@ IMG_ID="$(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public
 
 glance image-update --property cw_os=Debian --property cw_origin=Cloudwatt --property hw_rng_model=virtio --min-disk 10 --purge-props $IMG_ID
 
+FREE_FLOATING_IP="$(neutron floatingip-list | grep -v "+" | grep -v "id" | tr -d " " | grep -v -E "^\|.+\|.+\|.+\|.+\|$" | cut -d "|" -f 2)"
+
+echo "======= Cleaning unassociated floating ips"
+
+for floating_id in $FREE_FLOATING_IP; do
+    neutron floatingip-delete $floating_id
+done
+
 glance image-show $IMG_ID
