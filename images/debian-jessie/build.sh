@@ -21,14 +21,24 @@ sed -i "s#name: debian#name: cloud#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#gecos: Debian#gecos: Cloud user#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#debian#cloud#" $TMP_DIR/etc/sudoers.d/debian-cloud-init
 sed -i "#ed25519#d" $TMP_DIR/etc/ssh/sshd_config
-
 sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
+
 guestunmount $TMP_DIR
 
 glance image-create \
        --file $IMG \
        --disk-format qcow2 \
        --container-format bare \
-       --name "$IMG_NAME"
+       --name "$IMG_NAME-tmp"
 
-echo "Image built: $(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f3,2)"
+TMP_IMG_ID="$(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME-tmp | tr "|" " " | tr -s " " | cut -d " " -f2)"
+
+packer build packer/jessie.packer.json -var "source_image=$TMP_IMG_ID" -var "image_name=$IMG_NAME"
+
+glance image-delete $IMG_NAME-tmp
+
+IMG_ID="$(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
+
+glance image-update --property cw_os=Debian --property cw_origin=Cloudwatt --property hw_rng_model=virtio --min-disk 10 --purge-props $IMG_ID
+
+glance image-show $IMG_ID
