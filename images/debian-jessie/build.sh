@@ -36,7 +36,7 @@ glance image-create \
 
 TMP_IMG_ID="$(glance image-list --owner $TENANT_ID --is-public False | grep $TMP_IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
 
-packer build -var "source_image=$TMP_IMG_ID" -var "image_name=$IMG_NAME" packer/jessie.packer.json
+packer build -var "source_image=$TMP_IMG_ID" -var "image_name=$IMG_NAME" ../apt-bootstrap.packer.json
 
 glance image-delete $TMP_IMG_NAME
 

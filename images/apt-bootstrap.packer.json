@@ -16,7 +16,6 @@
             "floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517"
         }
     ],
-
     "provisioners": [
         {
             "type": "shell",
@@ -30,8 +29,14 @@
         {
             "type": "ansible-local",
             "playbook_dir": "ansible",
-            "playbook_file": "ansible/jessie-bootstrap.yml",
+            "playbook_file": "ansible/bootstrap.yml",
             "inventory_file": "ansible/inventory"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get clean -y"
+            ]
         }
     ]
 }
