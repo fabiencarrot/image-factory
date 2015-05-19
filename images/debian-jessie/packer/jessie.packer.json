@@ -11,7 +11,9 @@
             "source_image": "{{ user `source_image` }}",
             "security_groups": ["PING_SSH"],
             "networks": ["a8816f03-cace-4c39-904e-d3fafdbfbe86"],
-            "flavor": "16"
+            "flavor": "16",
+            "use_floating_ip": "true",
+            "floating_ip": "9d13cff6-c4c3-4a7f-bedc-798fe3e5f53d"
         }
     ],
 
