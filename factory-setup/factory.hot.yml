@@ -12,19 +12,19 @@ parameters:
 
     
 resources:
-  dmz_net:
+  dmz:
     type: OS::Neutron::Net
         
   dmz_subnet:
     type: OS::Neutron::Subnet
     properties:
-      network_id: { get_resource: dmz_net }
+      network_id: { get_resource: dmz }
       ip_version: 4
       cidr: 10.42.42.0/24
       allocation_pools:
         - { start: 10.42.42.100, end: 10.42.42.199 }
 
-  factory_sg:
+  sg:
     type: OS::Neutron::SecurityGroup
     properties:
       rules:
@@ -33,27 +33,21 @@ resources:
         - { direction: egress, protocol: TCP }
         - { direction: egress, protocol: UDP }
 
-  factory_realm_sg:
-    type: OS::Neutron::SecurityGroup
-    properties:
-      rules:
-        - { direction: ingress, protocol: TCP, port_range_min: 22, port_range_max: 22, remote_group_id: { get_resource: factory_sg } }
-    
-  factory_ip:
+  ip:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network_id: 6ea98324-0f14-49f6-97c0-885d1b8dc517
 
-  factory_server:
+  server:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: keypair_name }
       image: 9d9140a8-9dbf-4027-89b2-59205b02d383
       flavor: n1.cw.standard-2
       networks:
-        - { network: { get_resource: dmz_net } }
+        - { network: { get_resource: dmz } }
       security_groups:
-        - { get_resource: factory_sg }
+        - { get_resource: sg }
       user_data_format: RAW
       user_data: |
             #!/bin/bash
@@ -70,5 +64,5 @@ resources:
   factory_internet_surface:
     type: OS::Nova::FloatingIPAssociation
     properties:
-      floating_ip: { get_resource: factory_ip }
-      server_id: { get_resource: factory_server }
+      floating_ip: { get_resource: ip }
+      server_id: { get_resource: server }
