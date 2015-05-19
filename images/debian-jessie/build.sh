@@ -1,5 +1,7 @@
 #!/bin/sh
 
+BUILDMARK="$(date +%Y-%m-%d-%H%M)"
+IMG_NAME="$BUILDMARK-debian-jessie"
 IMG=debian-8.0.0-openstack-amd64.qcow2
 IMG_URL=http://cdimage.debian.org/cdimage/openstack/current/$IMG
 
@@ -25,6 +27,6 @@ glance image-create \
        --file $IMG \
        --disk-format qcow2 \
        --container-format bare \
-       --name 'Debian Jessie'
+       --name "$IMG_NAME"
 
-# install haveged package
+echo "Image built: $(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f3,2)"
