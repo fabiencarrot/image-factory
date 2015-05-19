@@ -7,10 +7,12 @@ IMG_URL=http://cdimage.debian.org/cdimage/openstack/current/$IMG
 
 TMP_DIR=debian-jessie-guest
 
-wget $IMG_URL
+if [ ! -f "$IMG" ]; then
+    wget $IMG_URL
+fi
 
 if [ ! -d "$TMP_DIR" ]; then
-    sudo mkdir $TMP_DIR
+    mkdir $TMP_DIR
 fi
 
 guestmount -a $IMG -i $TMP_DIR
