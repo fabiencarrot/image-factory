@@ -1,7 +1,10 @@
 #!/bin/sh
 
+TENANT_ID="772be1ffb32e42a28ac8e0205c0b0b90"
 BUILDMARK="$(date +%Y-%m-%d-%H%M)"
-IMG_NAME="$BUILDMARK-debian-jessie"
+IMG_NAME="debian-jessie-$BUILDMARK"
+TMP_IMG_NAME="$IMG_NAME-tmp"
+
 IMG=debian-8.0.0-openstack-amd64.qcow2
 IMG_URL=http://cdimage.debian.org/cdimage/openstack/current/$IMG
 
@@ -29,15 +32,15 @@ glance image-create \
        --file $IMG \
        --disk-format qcow2 \
        --container-format bare \
-       --name "$IMG_NAME-tmp"
+       --name "$TMP_IMG_NAME"
 
-TMP_IMG_ID="$(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME-tmp | tr "|" " " | tr -s " " | cut -d " " -f2)"
+TMP_IMG_ID="$(glance image-list --owner $TENANT_ID --is-public False | grep $TMP_IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
 
 packer build -var "source_image=$TMP_IMG_ID" -var "image_name=$IMG_NAME" packer/jessie.packer.json
 
-glance image-delete $IMG_NAME-tmp
+glance image-delete $TMP_IMG_NAME
 
-IMG_ID="$(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
+IMG_ID="$(glance image-list --owner $TENANT_ID --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
 
 glance image-update --property cw_os=Debian --property cw_origin=Cloudwatt --property hw_rng_model=virtio --min-disk 10 --purge-props $IMG_ID
 
