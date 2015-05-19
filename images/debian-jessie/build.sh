@@ -20,8 +20,8 @@ sed -i "s#gecos: Debian#gecos: Cloud user#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#debian#cloud#" $TMP_DIR/etc/sudoers.d/debian-cloud-init
 sed -i "#ed25519#d" $TMP_DIR/etc/ssh/sshd_config
 
-sudo sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
-sudo guestunmount $TMP_DIR
+sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
+guestunmount $TMP_DIR
 
 glance image-create \
        --file $IMG \
