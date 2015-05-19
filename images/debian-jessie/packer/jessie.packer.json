@@ -1,14 +1,18 @@
 {
+    "variables": {
+        "source_image": "unknown",
+        "image_name": "unknown"
+    },
     "builders": [
         {
             "type": "openstack",
             "ssh_username": "cloud",
-            "image_name": "Jessie",
-            "source_image": "38ec83d2-b9d6-4d36-b55e-718942ec9516",
+            "image_name": "{{ user `image_name` }}",
+            "source_image": "{{ user `source_image` }}",
             "use_floating_ip": "true",
             "floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517",
             "security_groups": ["PING_SSH"],
-            "networks": ["a27d058b-fa48-4d29-b874-c39b4f1c618c"],
+            "networks": ["a8816f03-cace-4c39-904e-d3fafdbfbe86"],
             "flavor": "16"
         }
     ],

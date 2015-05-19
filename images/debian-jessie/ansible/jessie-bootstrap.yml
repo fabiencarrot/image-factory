@@ -18,3 +18,9 @@
         - curl
         - bzip2
         - unzip
+
+    - name: debian user removed
+      user:
+        name=debian
+        state=absent
+        remove=yes
