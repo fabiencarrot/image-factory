@@ -29,9 +29,9 @@
         },
         {
             "type": "ansible-local",
-            "playbook_dir": "../ansible",
-            "playbook_file": "../ansible/jessie-bootstrap.yml",
-            "inventory_file": "../ansible/inventory"
+            "playbook_dir": "ansible",
+            "playbook_file": "ansible/jessie-bootstrap.yml",
+            "inventory_file": "ansible/inventory"
         }
     ]
 }
