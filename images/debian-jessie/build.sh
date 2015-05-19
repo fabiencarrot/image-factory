@@ -33,7 +33,7 @@ glance image-create \
 
 TMP_IMG_ID="$(glance image-list --owner 772be1ffb32e42a28ac8e0205c0b0b90 --is-public False | grep $IMG_NAME-tmp | tr "|" " " | tr -s " " | cut -d " " -f2)"
 
-packer build packer/jessie.packer.json -var "source_image=$TMP_IMG_ID" -var "image_name=$IMG_NAME"
+packer build -var "source_image=$TMP_IMG_ID" -var "image_name=$IMG_NAME" packer/jessie.packer.json
 
 glance image-delete $IMG_NAME-tmp
 
