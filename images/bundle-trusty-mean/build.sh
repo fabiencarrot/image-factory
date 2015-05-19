@@ -1,8 +1,9 @@
 #!/bin/sh
 
+BASENAME="bundle-trusty-mean"
 TENANT_ID="772be1ffb32e42a28ac8e0205c0b0b90"
 BUILDMARK="$(date +%Y-%m-%d-%H%M)"
-IMG_NAME="bundle-trusty-mean-$BUILDMARK"
+IMG_NAME="$BASENAME-$BUILDMARK"
 TMP_IMG_NAME="$IMG_NAME-tmp"
 CW_BUNDLE="MEAN"
 
@@ -22,5 +23,9 @@ echo "======= Cleaning unassociated floating ips"
 for floating_id in $FREE_FLOATING_IP; do
     neutron floatingip-delete $floating_id
 done
+
+echo "======= Cleaning too old images"
+
+glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs glance image-delete
 
 glance image-show $IMG_ID
