@@ -30,3 +30,9 @@ echo "======= Cleaning too old images"
 glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs glance image-delete
 
 glance image-show $IMG_ID
+
+if [ ! -d "target" ]; then
+    mkdir target
+fi
+
+sed "s/\\\$IMAGE\\\$/$IMG_ID/g" heat/bundle-trusty-lamp.heat.yml > target/bundle-trusty-lamp.heat.yml
