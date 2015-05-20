@@ -27,7 +27,7 @@ done
 
 echo "======= Cleaning too old images"
 
-glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs glance image-delete
+glance image-list | grep $BASENAME | tr "|" " " | tr -s " " | cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs -r glance image-delete
 
 glance image-show $IMG_ID
 
