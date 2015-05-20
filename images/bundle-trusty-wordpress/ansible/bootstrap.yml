@@ -4,7 +4,7 @@
 
   vars:
     wp_db_name: wordpress
-    wp_db_pass: "{{ lookup('password', '/root/keystore chars=ascii_letters,digits,hexdigits,punctuation') }}"
+    wp_db_pass: "{{ lookup('password', '/tmp/keystore chars=ascii_letters,digits,hexdigits,punctuation') }}"
 
   tasks:
     - name: packages installed
