@@ -1,0 +1,43 @@
+- hosts: local
+  user: cloud
+  sudo: true
+
+  vars:
+    pg_admin_pass: "{{ lookup('password', '/root/keystore chars=ascii_letters,digits,hexdigits,punctuation') }}"
+    
+  tasks:
+    - name: packages installed
+      apt:
+        pkg={{ item }}
+        state=present
+      with_items:
+        - postgresql
+        - phppgadmin
+
+    - name: apache conf.d linked
+      file:
+        state=link
+        src="{{ item.path }}"
+        dest="{{ item.dest }}"
+        owner=root
+        group=root
+      with_items:
+        - { path: '/etc/apache2/conf.d/phppgadmin', dest: '/etc/apache2/conf-available/phppgadmin.conf' }
+        - { path: '/etc/apache2/conf-available/phppgadmin.conf', dest: '/etc/apache2/conf-enabled/phppgadmin.conf' }
+      notify: restart apache
+        
+    - name: create admin user
+      postgresql_user:
+        name=pgadmin
+        state=present
+        password="{{ pg_admin_pass }}"
+        
+  handlers:
+    - name: restart apache
+      service:
+        name=apache2
+        state=restarted
+        enabled=yes
+
+
+        
