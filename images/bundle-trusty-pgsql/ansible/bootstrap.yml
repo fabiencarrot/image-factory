@@ -2,9 +2,6 @@
   user: cloud
   sudo: true
 
-  vars:
-    pg_admin_pass: "{{ lookup('password', '/root/keystore chars=ascii_letters,digits,hexdigits,punctuation') }}"
-    
   tasks:
     - name: packages installed
       apt:
@@ -26,13 +23,6 @@
         - { path: '/etc/apache2/conf.d/phppgadmin', dest: '/etc/apache2/conf-available/phppgadmin.conf' }
         - { path: '/etc/apache2/conf-available/phppgadmin.conf', dest: '/etc/apache2/conf-enabled/phppgadmin.conf' }
       notify: restart apache
-        
-    - name: create admin user
-      sudo_user: postgres
-      postgresql_user:
-        name=pgadmin
-        state=present
-        password="{{ pg_admin_pass }}"
         
   handlers:
     - name: restart apache
