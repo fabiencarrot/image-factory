@@ -13,7 +13,7 @@ packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" ../apt-boo
 
 IMG_ID="$(glance image-list --owner $TENANT_ID --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
 
-if [ "$IMG_ID" ]; then
+if [ ! "$IMG_ID" ]; then
     echo "Failed to get image id"
     exit 1
 fi
