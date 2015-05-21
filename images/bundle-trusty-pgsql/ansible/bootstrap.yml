@@ -13,6 +13,7 @@
       with_items:
         - postgresql
         - phppgadmin
+        - python-psycopg2
 
     - name: apache conf.d linked
       file:
@@ -27,6 +28,7 @@
       notify: restart apache
         
     - name: create admin user
+      sudo_user: postgres
       postgresql_user:
         name=pgadmin
         state=present
