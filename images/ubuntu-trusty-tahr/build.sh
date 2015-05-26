@@ -59,4 +59,4 @@ glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | s
 
 glance image-show $IMG_ID
 
-$WORKSPACE/test-tools/ala/test.sh $BASENAME
+$WORKSPACE/test-tools/ala/run_tests.sh $BASENAME
