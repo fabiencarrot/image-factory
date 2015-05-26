@@ -1,6 +1,4 @@
 #!/bin/sh
-#apt-update-upgrade
-
 
 wait_to_boot() {
     local vm_id=$1
@@ -35,7 +33,7 @@ wait_to_boot() {
 
     while [[ $I -gt 0 ]]
     do
-        n=$(nova --insecure console-log $vm_id | grep -i -c "$msg")
+        n=$(nova console-log $vm_id | grep -i -c "$msg")
         if  [[ $n -lt $count ]]
         then
             echo "  Waiting for cloud-init to finish"
@@ -680,137 +678,6 @@ function test_volume() {
     delete_floating_ip $IP
 }
 
-function test_windows_set_password(){
-    echo ""
-    echo "Starting windows tests"
-    echo "----------------------"
-
-    SG=$(create_test_sg)
-
-    VM_NAME="vm-"$RANDOM
-    META="--meta admin_pass=$WIN_PASSWORD"
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR "$META")
-    echo "  Instance $VM_ID started"
-    IP=$(create_floating_ip)
-    associate_floating_to_vm $IP $VM_ID
-
-    if wait_to_boot $VM_ID $IP
-    then
-        vm_password=`nova get-password $VM_ID $PRIVATE_KEY`
-        if [ "`echo $WIN_PASSWORD | grep $vm_password`" ]
-        then
-            echo "TEST windows set password : OK"
-        else
-            echo "TEST windows set password : KO"
-        fi
-    fi
-
-    delete_vm $VM_ID
-    delete_test_sg $SG
-    delete_floating_ip $IP
-
-
-}
-
-function test_windows(){
-    echo ""
-    echo "Starting windows tests"
-    echo "----------------------"
-
-    SG=$(create_test_sg)
-
-    VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
-    echo "  Instance $VM_ID started"
-    IP=$(create_floating_ip)
-    associate_floating_to_vm $IP $VM_ID
-
-    if wait_to_boot $VM_ID $IP
-    then
-        password=`nova get-password $VM_ID $PRIVATE_KEY`
-        out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  'powershell -Command ls .ssh' 2>&1`
-
-        if [ "`echo $out | grep authorized_keys`" ]
-        then
-            echo "TEST windows random password : OK"
-        else
-            echo "TEST windows random password : KO"
-        fi
-
-        DISK_SIZE=`nova flavor-list  | grep " $FLAVOR " | awk '{print $8}'`
-        out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  'powershell -Command Get-Disk' 2>&1`
-
-        if [ "`echo $out | grep \"$DISK_SIZE GB\"`" ]
-        then
-            echo "TEST windows disk size : OK"
-        else
-            if [ "`echo $out | grep CommandNotFoundException`" ]
-	    then
-		#windows 2008"
-		out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  "powershell -Command New-Item c:\test_file.txt -type file -force -value 'list disk'" 2>&1`
-		out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  "powershell -Command DISKPART /S c:\test_file.txt" 2>&1`
-		if [ "`echo $out | grep \"$DISK_SIZE GB\"`" ]
-		then
-		    echo "TEST windows disk size : OK"
-		else
-		    echo "TEST windows disk size : KO"
-		fi
-	    else
-		echo "TEST windows disk size : KO"
-	    fi
-	fi
-
-        VOLUME_ID=$(create_attach_volume $VM_ID)
-        echo "  Volume $VOLUME_ID created and attached to $VM_ID"
-        sleep $SMALL_SLEEP
-        out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  'powershell -Command Get-Disk 1' 2>&1`
-        if [ "`echo $out | grep \" $VOLUME_SIZE GB\"`" ]
-        then
-            echo "TEST windows volume : OK"
-        else
-	    if [ "`echo $out | grep CommandNotFoundException`" ]
-            then
-                #windows 2008"
-		out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  "powershell -Command DISKPART /S c:\test_file.txt" 2>&1`
-                SIZE=$((1024 * $VOLUME_SIZE))
-		if [ "`echo $out | grep \"$SIZE MB\"`" ]
-                then
-                    echo "TEST windows volume : OK"
-                else
-                    echo "TEST windows volume : KO"
-                fi
-            else
-                echo "TEST windows volume : KO"
-            fi
-	fi
-        out=`python ./wsmancmd.py -U https://$IP:5986/wsman -u Admin -p $password  'powershell -Command Get-Date' 2>&1`
-        echo $out
-        local_date=`date +%s`
-        echo $local_date
-        win_date=`date --date="$out" +%s`
-        echo $win_date
-
-        dif=$(($local_date - $win_date));
-        dif=${dif#-}
-
-        echo $dif
-        if [[ $dif -ge 7300 ]]
-        then
-            echo "TEST windows time : KO"
-        else
-            echo "TEST windows time : OK"
-        fi
-
-    fi
-    detach_delete_volume $VM_ID $VOLUME_ID
-    delete_vm $VM_ID
-    delete_test_sg $SG
-    delete_floating_ip $IP
-
-
-}
-
-
 
 function test_rescue() {
 
@@ -1013,11 +880,6 @@ function tests_cloud_init() {
 
 }
 
-run_all_windows_tests(){
-    test_windows_set_password
-    test_windows
-}
-
 run_all_tests() {
     tests_with_ssh
     test_key
@@ -1030,11 +892,4 @@ run_all_tests() {
     test_shellshock
     test_aftershock
     test_google_dns
-}
-
-run_some_tests() {
-    for test in $@
-    do
-        $test
-    done
 }

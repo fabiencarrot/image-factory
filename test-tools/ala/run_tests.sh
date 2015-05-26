@@ -53,5 +53,4 @@ else
     truncate -s 0 $LOG_FILE
 fi
 
-
 run_all_tests

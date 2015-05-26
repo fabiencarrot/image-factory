@@ -27,6 +27,13 @@ sed -i "s#ubuntu#cloud#" $TMP_DIR/etc/sudoers.d/debian-cloud-init
 sed -i "#ed25519#d" $TMP_DIR/etc/ssh/sshd_config
 sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
 
+sed -i "s#LABEL=cloudimg-rootfs#/dev/vda1#" \
+     $tempdir/etc/fstab $tempdir/boot/grub/menu.lst \
+     $tempdir/boot/grub/grub.cfg
+
+sed -i "s/#GRUB_DISABLE_LINUX_UUID/GRUB_DISABLE_LINUX_UUID/" \
+     $tempdir/etc/default/grub
+
 guestunmount $TMP_DIR
 
 glance image-create \
@@ -59,4 +66,4 @@ glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | s
 
 glance image-show $IMG_ID
 
-$WORKSPACE/test-tools/ala/run_tests.sh $BASENAME
+$WORKSPACE/test-tools/ala/run_tests.sh $IMG_ID
