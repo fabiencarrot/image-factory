@@ -302,7 +302,7 @@ function tests_with_ssh() {
         out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "sudo ls 2>&1")
         if [ "`echo $out | grep 'unable to resolve host'`" ]
         then
-            echo "TEST local name resolution : KO"
+            echo "TEST local name resolution : KO => $out"
         else
             echo "TEST local name resolution : OK"
         fi
