@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-IMAGE=${IMAGE:="Windows Server 2012 R2"}
-FLAVOR=${FLAVOR:="n1.cw.highcpu-2"}
-ALT_FLAVOR=${ALT_FLAVOR:="n1.cw.highcpu-3"}
-NETWORK=${NETWORK:="1e3d7d66-7508-437f-bbcf-f38ca236c28b"}
+IMAGE=$1
+FLAVOR=${FLAVOR:="n1.cw.standard-1"}
+ALT_FLAVOR=${ALT_FLAVOR:="n1.cw.standard-2"}
+NETWORK=${NETWORK:="a8816f03-cace-4c39-904e-d3fafdbfbe86"}
 POOL=${POOL:="6ea98324-0f14-49f6-97c0-885d1b8dc517"}
-KEY=${KEY:="test_win"}
-PRIVATE_KEY=${PRIVATE_KEY:="/home/arezmerita/Downloads/test_win.pem"}
+KEY=${KEY:="jenkins-ci"}
+PRIVATE_KEY=${PRIVATE_KEY:="/var/lib/jenkins/.ssh/jenkins-ci.pem"}
 LOG_FILE=${LOG_FILE:="test.log"}
 SSH_USER=${SSH_USER:="cloud"}
 HOST="google.com"
