@@ -9,11 +9,14 @@ TMP_IMG_NAME="$IMG_NAME-tmp"
 IMG=ubuntu-14.04-server-cloudimg-amd64-disk1.img
 IMG_URL=http://cloud-images.ubuntu.com/releases/14.04/release/$IMG
 
-TMP_DIR=debian-jessie-guest
+TMP_DIR=guest
 
-if [ ! -f "$IMG" ]; then
-    wget $IMG_URL
+
+if [ -f "$IMG" ]; then
+    rm $IMG
 fi
+
+wget $IMG_URL
 
 if [ ! -d "$TMP_DIR" ]; then
     mkdir $TMP_DIR
