@@ -53,20 +53,5 @@ else
     truncate -s 0 $LOG_FILE
 fi
 
-if [ $WIN -eq 1 ]
-then
-    echo "Running window tests"
-    run_all_windows_tests
-else
-    if [ $# -eq 0 ]
-    then
-        echo "Running all tests"
-        run_all_tests
-    else
-        echo "Running tests: $@"
-        run_some_tests $@
-    fi
-fi
 
-
-
+run_all_tests
