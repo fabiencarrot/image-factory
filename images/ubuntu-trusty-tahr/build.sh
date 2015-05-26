@@ -23,9 +23,7 @@ guestmount -a $IMG -i $TMP_DIR
 
 sed -i "s#name: ubuntu#name: cloud#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#gecos: Ubuntu#gecos: Cloud user#" $TMP_DIR/etc/cloud/cloud.cfg
-#sed -i "s#ubuntu#cloud#" $TMP_DIR/etc/sudoers.d/debian-cloud-init
-#sed -i "#ed25519#d" $TMP_DIR/etc/ssh/sshd_config
-#sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
+sed -i "#ed25519#d" $TMP_DIR/etc/ssh/sshd_config
 
 sed -i "s#LABEL=cloudimg-rootfs#/dev/vda1#" \
      $TMP_DIR/etc/fstab $TMP_DIR/boot/grub/menu.lst \
