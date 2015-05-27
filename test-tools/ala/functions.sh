@@ -1,61 +1,56 @@
 #!/bin/sh
 
+TIMEOUT=180
+SMALL_SLEEP=60
+MINI_SLEEP=10
+RETRY=10
+SLES=0
+VOLUME_SIZE=1
+REBOOT=0
+
+
 wait_to_boot() {
     local vm_id=$1
     local ip=$2
     local count=1
 
-    if [ $SLES -eq 1 ]
-    then
+    if [ $SLES -eq 1 ]; then
         count=2
     fi
 
-    if [ $REBOOT -eq 1 ]
-    then
+    if [ $REBOOT -eq 1 ]; then
         count=1
     fi
 
     vm_state=`nova list | grep $vm_id | awk '{print $6}'`
-    if [ "$vm_state" == "ERROR" ]
-    then
+    if [ "$vm_state" == "ERROR" ]; then
     	echo "TEST failed : server in error state"
-		return 1
+	return 1
     fi
 
-    if [ $WIN -eq 1 ]
-    then
-        msg="cloudbase-init stop_service"
-    else
-        msg="Cloud-init .* finished at"
-    fi
+    msg="Cloud-init .* finished at"
 
     I=$RETRY
 
-    while [[ $I -gt 0 ]]
-    do
+    while [[ $I -gt 0 ]]; do
+        echo "  Waiting for cloud-init to finish"
+        
         n=$(nova console-log $vm_id | grep -i -c "$msg")
-        if  [[ $n -lt $count ]]
-        then
-            echo "  Waiting for cloud-init to finish"
+
+        if  [[ $n -lt $count ]]; then
             sleep $SMALL_SLEEP
             I=$(($I - 1))
             continue
         fi
 
-
         echo "  cloud-init finished."
-        if [[ $WIN -eq 1 ]]
-        then
-            return 0
-        fi
 
-        if ping -w 1 -c 1 $ip &>/dev/null
-        then
+        if ping -w 1 -c 1 $ip &>/dev/null; then
             return 0
+        else
+            echo "TEST failed : server does not ping"
+            return 1
         fi
-
-        echo "TEST failed : server does not ping"
-        return 1
     done
 
     echo "TEST failed : server did not start"
@@ -69,12 +64,10 @@ wait_vm_state() {
     local state=$2
     local vm_state=`nova list | grep $id | awk '{print $6}'`
 
-    while [ "$vm_state" != $state ]
-    do
+    while [ "$vm_state" != $state ]; do
         sleep $MINI_SLEEP
         vm_state=`nova list | grep $id | awk '{print $6}'`
-        if [ "$vm_state" == "ERROR" ]
-        then
+        if [ "$vm_state" == "ERROR" ]; then
             return
         fi
     done
@@ -92,6 +85,7 @@ boot_vm() {
 
     ID=`nova boot --flavor $flavor --image "$image" --key-name $key --security-groups $sg --nic net-id=$NETWORK $args $name | grep " id " | awk '{print $4}'`
     wait_vm_state $ID "ACTIVE"
+    
     echo $ID
 }
 
@@ -106,6 +100,7 @@ boot_vm_with_port_and_userdata() {
     local user_data=$7
     ID=`nova boot --flavor $flavor --image "$image" --key-name $key --security-groups $sg --nic port-id=$port --user-data $user_data $name | grep " id " | awk '{print $4}'`
     wait_vm_state $ID "ACTIVE"
+    
     echo $ID
 
 }
@@ -853,20 +848,18 @@ function tests_cloud_init() {
     VM_NAME="vm-"$RANDOM
     VM_ID=$(boot_vm_with_port_and_userdata $SG $VM_NAME $KEY "$IMAGE" $FLAVOR $PORT_ID $USER_DATA_FILE)
     echo "  Instance $VM_ID started"
-    if wait_to_boot $VM_ID $IP
-    then
+    if wait_to_boot $VM_ID $IP; then
 
         out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "sudo ls /root/" 2>&1)
-        if [ "`echo $out | grep cloud-init.txt`" ]
-        then
+        if [ "`echo $out | grep cloud-init.txt`" ]; then
             echo "TEST cloud-config run-cmd : OK"
         else
             echo "TEST cloud-config run-cmd : KO"
         fi
+            
         out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "emacs --version" 2>&1)
 
-        if [ "`echo $out | grep \"GNU Emacs\"`" ]
-        then
+        if [ "`echo $out | grep \"GNU Emacs\"`" ]; then
             echo "TEST cloud-config packages : OK"
         else
             echo "TEST cloud-config packages : KO"
@@ -877,7 +870,6 @@ function tests_cloud_init() {
     delete_port $PORT_ID
     delete_test_sg $SG
     delete_floating_ip $IP
-
 }
 
 run_all_tests() {
@@ -885,10 +877,12 @@ run_all_tests() {
     test_key
     test_volume
     test_rescue
+    test_haveged
+
     test_snashot_flavor
     test_soft_hard_reboot
     tests_cloud_init
-    test_haveged
+
     test_shellshock
     test_aftershock
     test_google_dns

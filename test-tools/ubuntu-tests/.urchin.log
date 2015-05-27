@@ -1,0 +1,14 @@
+Running tests at 2015-05-27T18:50:08
+console-log passed
+default user login passed
+disk size failed
+dns resolver passed
+get-spice-log passed
+haveged running passed
+hostname passed
+local name resolution passed
+no root ssh passed
+no visible auth error passed
+package-update-upgrade-install passed
+rescue passed
+volume attachment passed

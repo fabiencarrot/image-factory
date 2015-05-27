@@ -10,16 +10,6 @@ PRIVATE_KEY=${PRIVATE_KEY:="/var/lib/jenkins/.ssh/jenkins-ci.pem"}
 LOG_FILE=${LOG_FILE:="test.log"}
 SSH_USER=${SSH_USER:="cloud"}
 HOST="google.com"
-TIMEOUT=180
-SMALL_SLEEP=60
-MINI_SLEEP=10
-
-RETRY=${RETRY:=10}
-WIN=${WIN:=0}
-SLES=${SLES:=0}
-WIN_PASSWORD="ZC83nSQZHpVYtj"
-VOLUME_SIZE=1
-REBOOT=0
 
 MY_PATH="`dirname \"$0\"`"              # relative
 MY_PATH="`( cd \"$MY_PATH\" && pwd )`"  # absolutized and normalized

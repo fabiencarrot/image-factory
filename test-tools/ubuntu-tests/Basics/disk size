@@ -1,0 +1,8 @@
+#!/bin/sh
+
+. ../env.sh
+. ../functions.sh
+
+DISK_SIZE="$(nova flavor-list  | grep " $FLAVOR " | awk '{print $8}')G"
+out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "df -h | grep /dev/vda1" | awk '{print $2}')
+[ "$out" = "$DISK_SIZE" ]

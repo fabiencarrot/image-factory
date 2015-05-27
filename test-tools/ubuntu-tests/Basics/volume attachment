@@ -1,0 +1,21 @@
+#!/bin/sh
+
+. ../env.sh
+. ../functions.sh
+
+RES=0
+
+VOLUME_ID=$(create_attach_volume $VM_ID)
+
+sleep $SMALL_SLEEP
+
+out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "ls /dev/vdb")
+if [ "`echo $out | grep \"/dev/vdb\"`" ]; then
+    RES=0
+else
+    RES=1
+fi
+
+detach_delete_volume $VM_ID $VOLUME_ID
+
+exit $RES
