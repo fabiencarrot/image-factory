@@ -13,7 +13,7 @@ HOST="google.com"
 TIMEOUT=180
 SMALL_SLEEP=60
 MINI_SLEEP=10
-USER_DATA_FILE=${USER_DATA_FILE:="./userdata.txt"}
+
 RETRY=${RETRY:=10}
 WIN=${WIN:=0}
 SLES=${SLES:=0}
@@ -30,7 +30,7 @@ if [ -z "$MY_PATH" ] ; then
 fi
 
 
-
+USER_DATA_FILE="$MY_PATH/userdata.txt"
 source $MY_PATH/functions.sh
 
 if [[ ! ("$OS_TENANT_NAME" && "$OS_USERNAME" && "$OS_PASSWORD" && "$OS_AUTH_URL") ]]
