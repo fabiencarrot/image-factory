@@ -187,7 +187,7 @@ delete_test_sg() {
     sleep $MINI_SLEEP
 }
 
-function detach_delete_volume() {
+detach_delete_volume() {
     local vm_id=$1
     local volume_id=$2
 
@@ -195,7 +195,8 @@ function detach_delete_volume() {
     sleep $SMALL_SLEEP
     cinder delete $volume_id
 }
-function create_attach_volume() {
+
+create_attach_volume() {
     local vm_id=$1
 
     VOLUME_ID=$(cinder create $VOLUME_SIZE | grep " id " | awk '{print $4}')
@@ -217,7 +218,6 @@ ssh_vm_execute_cmd() {
     output=$(ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -t -q -i $key $server $cmd)
     echo "$output"
 }
-
 
 delete_vm() {
     local vm_id=$1
