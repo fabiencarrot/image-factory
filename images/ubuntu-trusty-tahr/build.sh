@@ -31,11 +31,9 @@ sed -i "s/gecos: Ubuntu/gecos: Cloud user/" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "/ed25519/d" $TMP_DIR/etc/ssh/sshd_config
 
 sed -i "s#LABEL=cloudimg-rootfs#/dev/vda1#" \
+    $TMP_DIR/etc/fstab \
     $TMP_DIR/boot/grub/menu.lst \
     $TMP_DIR/boot/grub/grub.cfg
-
-echo "proc  /proc  proc  nodev,noexec,nosuid  0  0" > $TMP_DIR/etc/fstab
-echo "/dev/vda1  /ext3  errors=remount-ro  0  1" >> $TMP_DIR/etc/fstab
 
 echo "sleep 5" >> $TMP_DIR/etc/init/plymouth-upstart-bridge.conf
 
