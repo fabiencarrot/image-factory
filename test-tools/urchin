@@ -74,12 +74,14 @@ recurse() {
     if [ $exit_code -eq 0 ]
       then
       # On success, print a green '✓'
-      printf '\033[32m✓ \033[0m'
+      #printf '\033[32m✓ \033[0m'
+      printf '\t+\t'
       printf '%s\n' "${potential_test}"
       printf '%s\n' "${potential_test} passed" >> "$logfile"
     else
       # On fail, print a red '✗'
-      printf '\033[31m✗ \033[0m'
+      #printf '\033[31m✗ \033[0m'
+      printf '\t-\t'
       printf '%s\n' "${potential_test}"
       printf '%s\n' "${potential_test} failed" >> "$logfile"
       printf '\033[31m' # Print output captured from failed test in red.
