@@ -9,12 +9,12 @@ nova image-create $VM_ID $S_NAME >> $LOG_FILE 2>&1
 
 S_ID=`glance image-list | grep $S_NAME | awk '{print $2}'`
 
-echo "Snapshoting vm "$S_ID
+echo "Snapshoting vm $S_ID"
 
 S_STATUS=`glance image-show $S_ID | grep " status " | awk '{print $4}'`
 
-while [ $S_STATUS != "active" ]; do
-    echo "  Waiting for snapshot $S_ID to be in active state"
+while [ "$S_STATUS" != "active" ]; do
+    echo "Waiting for snapshot $S_ID to be in active state"
     sleep $SMALL_SLEEP
     S_STATUS=`glance image-show $S_ID | grep " status " | awk '{print $4}'`
 done
