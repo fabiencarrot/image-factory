@@ -22,14 +22,14 @@ else
 fi
 
 for F in $FILE_LIST; do
+
     out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "cat $F" 2>&1)
-    if [ "`echo $out | grep 'No such file'`" ]
-    then
+
+    if [ "`echo $out | grep 'No such file'`" ]; then
         continue
     fi
 
-    if [ "`echo $out | grep \"/dev/vda1\"`" ]
-    then
+    if [ "`echo $out | grep \"/dev/vda1\"`" ]; then
         echo "TEST /dev/vda1 path in $F : OK"
     else
         echo "TEST vda1 path in $F not found: KO"
