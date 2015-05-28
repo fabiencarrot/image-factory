@@ -75,18 +75,20 @@ recurse() {
       then
       # On success, print a green '✓'
       #printf '\033[32m✓ \033[0m'
-      printf '\t+\t'
+      printf '\t+ '
       printf '%s\n' "${potential_test}"
       printf '%s\n' "${potential_test} passed" >> "$logfile"
     else
       # On fail, print a red '✗'
       #printf '\033[31m✗ \033[0m'
-      printf '\t-\t'
+      printf '\t- '
       printf '%s\n' "${potential_test}"
       printf '%s\n' "${potential_test} failed" >> "$logfile"
-      printf '\033[31m' # Print output captured from failed test in red.
+      #printf '\033[31m' # Print output captured from failed test in red.
+      printf '== stdout ==\n'
       cat "$stdout_file"
-      printf '\033[0m'
+      printf '== end of stdout ==\n'
+      #printf '\033[0m'
     fi
   fi
   [ $indent_level -eq 0 ] && rm "$stdout_file"
@@ -156,9 +158,9 @@ urchin_go() {
   echo "Done, took $elapsed $(plural second $elapsed)."
   set -- $(grep -e 'passed$' "$logfile"|wc -l) $(grep -e 'failed$' "$logfile"|wc -l)
   printf '%s\n' "$1 $(plural test "$1") passed."
-  [ $2 -gt 0 ] && printf '\033[31m' || printf '\033[32m' # If tests failed, print the message in red, otherwise in green.
+  # [ $2 -gt 0 ] && printf '\033[31m' || printf '\033[32m' # If tests failed, print the message in red, otherwise in green.
   printf '%s\n' "$2 $(plural test "$2") failed."
-  printf '\033[m'
+  #printf '\033[m'
   return "$2"
 }
 
