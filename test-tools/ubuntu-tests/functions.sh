@@ -54,7 +54,7 @@ wait_vm_state() {
     local state=$2
     local vm_state=`nova list | grep $id | awk '{print $6}'`
 
-    while [ "$vm_state" != $state ]; do
+    while [ "$vm_state" != "$state" ]; do
         sleep $MINI_SLEEP
         vm_state=`nova list | grep $id | awk '{print $6}'`
         if [ "$vm_state" == "ERROR" ]; then
