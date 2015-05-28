@@ -154,7 +154,7 @@ delete_floating_ip() {
 
 create_test_sg() {
 
-    SG_NAME="test-sg-"$RANDOM
+    SG_NAME="test-sg-$RANDOM"
 
     ID=`neutron security-group-create $SG_NAME | grep " id " | awk '{print $4}'`
 
@@ -166,7 +166,7 @@ create_test_sg() {
 
 create_keypair() {
 
-    KEY_NAME="key-"$RANDOM
+    KEY_NAME="key-$RANDOM"
     ssh-keygen -t rsa -f $KEY_NAME -P ""
     private=`nova keypair-add --pub-key "./$KEY_NAME.pub" $KEY_NAME`
     echo $KEY_NAME
@@ -201,12 +201,13 @@ create_attach_volume() {
 
     VOLUME_ID=$(cinder create $VOLUME_SIZE | grep " id " | awk '{print $4}')
     V_STATUS=`cinder list | grep $VOLUME_ID | awk '{print $4}'`
-    while [ $V_STATUS != "available" ]
-    do
+    while [ $V_STATUS != "available" ]; do
         sleep $MINI_SLEEP
-	V_STATUS=`cinder list | grep $VOLUME_ID | awk '{print $4}'`
+	    V_STATUS=`cinder list | grep $VOLUME_ID | awk '{print $4}'`
     done
+
     nova volume-attach $vm_id $VOLUME_ID
+
     echo $VOLUME_ID
 }
 
@@ -216,6 +217,7 @@ ssh_vm_execute_cmd() {
     local cmd="$3"
 
     output=$(ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -t -q -i $key $server $cmd)
+    
     echo "$output"
 }
 
