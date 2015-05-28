@@ -1,7 +1,6 @@
 TIMEOUT=180
 SMALL_SLEEP=60
 MINI_SLEEP=10
-RETRY=10
 SLES=0
 VOLUME_SIZE=1
 REBOOT=0
@@ -27,15 +26,15 @@ wait_to_boot() {
 
     msg="Cloud-init .* finished at"
 
-    I=$RETRY
+    RETRY=9
 
-    while [[ $I -gt 0 ]]; do
+    while [[ $RETRY -gt 0 ]]; do
 
         n=$(nova console-log $vm_id | grep -i -c "$msg")
 
         if  [[ $n -lt $count ]]; then
-            sleep $SMALL_SLEEP
-            I=$(($I - 1))
+            sleep 20
+            RETRY=$(($RETRY - 1))
             continue
         fi
 
