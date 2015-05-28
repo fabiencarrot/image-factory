@@ -152,7 +152,8 @@ delete_floating_ip() {
 
 create_test_sg() {
 
-    SG_NAME="test-sg-$RANDOM"
+    RAND=$RANDOM
+    SG_NAME="test-sg-$RAND"
 
     ID=`neutron security-group-create $SG_NAME | grep " id " | awk '{print $4}'`
 
