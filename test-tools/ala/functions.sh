@@ -254,7 +254,7 @@ function tests_with_ssh() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -399,7 +399,7 @@ function test_google_dns(){
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -437,7 +437,7 @@ function test_haveged() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -468,7 +468,7 @@ function test_shellshock() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -501,7 +501,7 @@ function test_aftershock() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -564,7 +564,7 @@ function test_soft_hard_reboot() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -618,7 +618,7 @@ function test_aftershock() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo " Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -648,7 +648,7 @@ function test_volume() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -683,7 +683,7 @@ function test_rescue() {
     SG=$(create_test_sg)
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -779,7 +779,7 @@ function test_snashot_flavor() {
 
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm $SG $VM_NAME $KEY "$IMAGE" $FLAVOR)
+    VM_ID=$(boot_vm $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR)
     echo "  Instance $VM_ID started"
     IP=$(create_floating_ip)
     associate_floating_to_vm $IP $VM_ID
@@ -802,7 +802,7 @@ function test_snashot_flavor() {
         echo "  Snapshot status is active"
 
         VM_S_NAME="vm-"$RANDOM
-        VM_S_ID=$(boot_vm $SG $VM_NAME $KEY $S_ID $ALT_FLAVOR)
+        VM_S_ID=$(boot_vm $SG $VM_NAME $KEYPAIR $S_ID $ALT_FLAVOR)
         echo "  Instance from snapshot $VM_S_ID started"
         S_IP=$(create_floating_ip)
         associate_floating_to_vm $S_IP $VM_S_ID
@@ -846,7 +846,7 @@ function tests_cloud_init() {
     associate_floating_to_port $IP_ID $PORT_ID
 
     VM_NAME="vm-"$RANDOM
-    VM_ID=$(boot_vm_with_port_and_userdata $SG $VM_NAME $KEY "$IMAGE" $FLAVOR $PORT_ID $USER_DATA_FILE)
+    VM_ID=$(boot_vm_with_port_and_userdata $SG $VM_NAME $KEYPAIR "$IMAGE" $FLAVOR $PORT_ID $USER_DATA_FILE)
     echo "  Instance $VM_ID started"
     if wait_to_boot $VM_ID $IP; then
 

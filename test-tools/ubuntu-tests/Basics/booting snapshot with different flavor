@@ -23,7 +23,7 @@ echo "Snapshot status is active"
 
 VM_S_NAME="vm-"$RANDOM
 
-VM_S_ID=$(boot_vm $SG $VM_NAME $KEY $S_ID $FLAVOR_ALT)
+VM_S_ID=$(boot_vm $SG $VM_NAME $KEYPAIR $S_ID $FLAVOR_ALT)
 
 echo "Instance from snapshot $VM_S_ID started"
 
