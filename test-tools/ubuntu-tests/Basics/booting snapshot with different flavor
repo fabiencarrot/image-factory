@@ -39,7 +39,7 @@ if wait_to_boot $VM_S_ID $S_IP; then
     if [ "$out" = "$DISK_SIZE" ]
     then
         echo "TEST change flavor for snapshot : OK"
-        
+
         delete_vm $VM_S_ID
         delete_floating_ip $S_IP
         glance image-delete $S_ID >> $LOG_FILE 2>&1

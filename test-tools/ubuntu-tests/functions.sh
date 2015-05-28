@@ -158,6 +158,7 @@ create_test_sg() {
 
     neutron security-group-rule-create --direction ingress --protocol tcp --port-range-min 22 --port-range-max 22 $ID >> $LOG_FILE 2>&1
     neutron security-group-rule-create --direction ingress --protocol icmp $ID >> $LOG_FILE 2>&1
+    neutron security-group-rule-create --direction egress --protocol icmp $ID >> $LOG_FILE 2>&1
 
     echo $SG_NAME
 }
