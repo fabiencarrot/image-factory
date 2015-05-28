@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ../envh.sh
+. ../env.sh
 . ../functions.sh
 
 SG=$(create_test_sg)

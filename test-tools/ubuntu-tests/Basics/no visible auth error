@@ -4,4 +4,4 @@
 . ../functions.sh
 
 out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "cat /var/log/auth.log")
-[ "`echo $out | grep error`" ]
+[ ! "`echo $out | grep error`" ]
