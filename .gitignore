@@ -5,3 +5,5 @@ target
 *.ipr
 *.iws
 .urchin.log
+.urchin_stdout
+.current-run.env.sh

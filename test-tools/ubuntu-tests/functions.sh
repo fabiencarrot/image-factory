@@ -19,21 +19,21 @@ wait_to_boot() {
     fi
 
     vm_state=`nova list | grep $vm_id | awk '{print $6}'`
-    if [ "$vm_state" == "ERROR" ]; then
+    if [ "$vm_state" = "ERROR" ]; then
     	echo "TEST failed : server in error state"
-	return 1
+	    return 1
     fi
 
     msg="Cloud-init .* finished at"
 
-    RETRY=9
+    RETRY=20
 
     while [[ $RETRY -gt 0 ]]; do
 
         n=$(nova console-log $vm_id | grep -i -c "$msg")
 
         if  [[ $n -lt $count ]]; then
-            sleep 20
+            sleep 30
             RETRY=$(($RETRY - 1))
             continue
         fi

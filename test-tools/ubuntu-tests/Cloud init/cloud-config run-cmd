@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. ../envh.sh
+. ../functions.sh
+
+out=$(ssh_vm_execute_cmd $PRIVATE_KEY "$SSH_USER@$IP" "sudo ls /root/" 2>&1)
+[ "`echo $out | grep cloud-init.txt`" ]
