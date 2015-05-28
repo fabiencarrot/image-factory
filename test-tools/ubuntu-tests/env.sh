@@ -8,7 +8,7 @@ KEYPAIR="jenkins-ci"
 PRIVATE_KEY="/var/lib/jenkins/.ssh/jenkins-ci.pem"
 SSH_USER="cloud"
 HOST="google.com"
-LOG_FILE="/dev/null"
+LOG_FILE="/tmp/test-ubuntu.log"
 USER_DATA_FILE="./userdata.txt"
 
 if [ -f "$TESTENV" ]; then
