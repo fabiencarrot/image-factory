@@ -4,6 +4,7 @@
 . ../functions.sh
 
 delete_vm $VM_ID
+sleep 30
 delete_port $PORT_ID
 delete_test_sg $SG
 delete_floating_ip $IP
