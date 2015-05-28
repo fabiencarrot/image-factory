@@ -1,4 +1,4 @@
-#!/bin/sh
+#!$TEST_SHELL
 
 . ../env.sh
 . ../functions.sh
