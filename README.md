@@ -12,4 +12,6 @@ Steps :
 * credentials OS dans .profile
 * restart jenkins
 * job de test avec heat stack-list
+* inject private key to bind
 * sky is the limit
+
