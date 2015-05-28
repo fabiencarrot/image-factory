@@ -10,7 +10,7 @@
             "image_name": "{{ user `image_name` }}",
             "source_image": "{{ user `source_image` }}",
             "security_groups": ["PING_SSH"],
-            "networks": ["a8816f03-cace-4c39-904e-d3fafdbfbe86"],
+            "networks": ["17decd89-56a2-4729-8bd6-453ebaa51860"],
             "flavor": "16",
             "use_floating_ip": "true",
             "floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517"
