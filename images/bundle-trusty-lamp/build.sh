@@ -11,7 +11,7 @@ CW_BUNDLE="LAMP"
 # Ubuntu Trusty
 SRC_IMG="f6f5a4cf-034b-443b-9d50-3865f76c4ac0"
 
-packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" ../apt-bootstrap.packer.json
+packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" ./lamp-bootstrap.packer.json
 
 IMG_ID="$(glance image-list --owner $TENANT_ID --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
 
@@ -25,9 +25,9 @@ for floating_id in $FREE_FLOATING_IP; do
     neutron floatingip-delete $floating_id
 done
 
-echo "======= Cleaning too old images"
+#echo "======= Cleaning too old images"
 
-glance image-list | grep $BASENAME | tr "|" " " | tr -s " " | cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs -r glance image-delete
+#glance image-list | grep $BASENAME | tr "|" " " | tr -s " " | cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs -r glance image-delete
 
 glance image-show $IMG_ID
 
