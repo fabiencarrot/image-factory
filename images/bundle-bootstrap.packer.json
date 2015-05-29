@@ -15,8 +15,8 @@
             "source_image": "{{ user `source_image` }}",
             "security_groups": "{{ user `factory_security_group` }}",
             "networks": "{{ user `factory_network` }}",
-            "use_floating_ip": "true",
-            "floating_ip_pool": "{{ user `factory_floating_ip_pool` }}"
+            "floating_ip_pool": "{{ user `factory_floating_ip_pool` }}",
+            "use_floating_ip": "true"
         }
     ],
     "provisioners": [
