@@ -24,8 +24,6 @@ IMG_NAME="$BASENAME-$BUILDMARK"
 TMP_IMG_NAME="$IMG_NAME-tmp"
 SRC_IMG="$BASE_IMG_UBUNTU_TRUSTY"
 
-echo "floating : $FACTORY_FLOATING_IP_POOL"
-
 echo "======= Packer provisionning..."
 packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" $PACKER_FILE
 

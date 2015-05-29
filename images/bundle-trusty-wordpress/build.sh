@@ -1,31 +1,45 @@
 #!/bin/sh
 
 BASENAME="bundle-trusty-wordpress"
-TENANT_ID="772be1ffb32e42a28ac8e0205c0b0b90"
+CW_BUNDLE="WORDPRESS"
+
+if [ ! "$OS_TENANT_ID" ]; then
+    echo "OS_TENANT_ID env variable is mandatory"
+    exit 1
+fi
+
+SELF_PATH=`dirname "$0"`
+FACTORY_ENV="$SELF_PATH/../../factory-env.sh"
+
+. $FACTORY_ENV
+
+if [ "$?" -ne "0" ]; then
+    echo "Could not source factory environment: $FACTORY_ENV"
+    exit 1
+fi
+
+PACKER_FILE="$SELF_PATH/../bundle-bootstrap.packer.json"
 BUILDMARK="$(date +%Y-%m-%d-%H%M)"
 IMG_NAME="$BASENAME-$BUILDMARK"
 TMP_IMG_NAME="$IMG_NAME-tmp"
-CW_BUNDLE="WORDPRESS"
+SRC_IMG="$BASE_IMG_UBUNTU_TRUSTY"
 
-# Ubuntu
-SRC_IMG="cc2e31fc-c24d-4905-bb45-1d57794a4f3c"
+echo "======= Packer provisionning..."
+packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" $PACKER_FILE
 
-packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" ../apt-bootstrap.packer.json
-
-IMG_ID="$(glance image-list --owner $TENANT_ID --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
-
+echo "======= Glance upload..."
+IMG_ID="$(glance image-list --owner $OS_TENANT_ID --is-public False | grep $IMG_NAME | tr "|" " " | tr -s " " | cut -d " " -f2)"
 glance image-update \
-       --property cw_bundle=$CW_BUNDLE \
-       --property cw_os=Ubuntu \
-       --property cw_origin=Cloudwatt \
-       --property hw_rng_model=virtio \
-       --min-disk 10 \
-       --purge-props \
-       $IMG_ID
-
-FREE_FLOATING_IP="$(neutron floatingip-list | grep -v "+" | grep -v "id" | tr -d " " | grep -v -E "^\|.+\|.+\|.+\|.+\|$" | cut -d "|" -f 2)"
+    --property cw_bundle=$CW_BUNDLE \
+    --property cw_os=Ubuntu \
+    --property cw_origin=Cloudwatt \
+    --property hw_rng_model=virtio \
+    --min-disk 10 \
+    --purge-props $IMG_ID
 
 echo "======= Cleaning unassociated floating ips"
+
+FREE_FLOATING_IP="$(neutron floatingip-list | grep -v "+" | grep -v "id" | tr -d " " | grep -v -E "^\|.+\|.+\|.+\|.+\|$" | cut -d "|" -f 2)"
 
 for floating_id in $FREE_FLOATING_IP; do
     neutron floatingip-delete $floating_id
@@ -35,10 +49,13 @@ echo "======= Cleaning too old images"
 
 glance image-list | grep $BASENAME | tr "|" " " | tr -s " " | cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs -r glance image-delete
 
-glance image-show $IMG_ID
 
-if [ ! -d "target" ]; then
-    mkdir target
+echo "======= Generating Heat template"
+
+if [ ! -d "$SELF_PATH/target" ]; then
+    mkdir $SELF_PATH/target
 fi
+sed "s/\\\$IMAGE\\\$/$IMG_ID/g" $SELF_PATH/heat/$BASENAME.heat.yml > $SELF_PATH/target/$BASENAME.heat.yml
 
-sed "s/\\\$IMAGE\\\$/$IMG_ID/g" heat/$BASENAME.heat.yml > target/$BASENAME.heat.yml
+echo "======= Image detail"
+glance image-show $IMG_ID
