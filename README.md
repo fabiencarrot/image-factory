@@ -15,3 +15,5 @@ Steps :
 * inject private key to bind
 * sky is the limit
 
+TODO:
+cleanup volumes

@@ -9,7 +9,7 @@ CW_BUNDLE="LAMP"
 
 
 # Ubuntu Trusty
-SRC_IMG="cc2e31fc-c24d-4905-bb45-1d57794a4f3c"
+SRC_IMG="f6f5a4cf-034b-443b-9d50-3865f76c4ac0"
 
 packer build -var "source_image=$SRC_IMG" -var "image_name=$IMG_NAME" ../apt-bootstrap.packer.json
 
