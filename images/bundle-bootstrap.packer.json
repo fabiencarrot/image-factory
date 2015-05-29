@@ -2,7 +2,7 @@
     "variables": {
         "source_image": "unknown",
         "image_name": "unknown",
-        "factory_floating_ip_pool": "{{ env `FACTORY_FLOATING_IP_POOL` }}",
+        "factory_floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517",
         "factory_network": "{{ env `FACTORY_NETWORK` }}",
         "factory_security_group": "{{ env `FACTORY_SECURITY_GROUP` }}"
     },
