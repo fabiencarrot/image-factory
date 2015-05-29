@@ -1,19 +1,22 @@
 {
     "variables": {
         "source_image": "unknown",
-        "image_name": "unknown"
+        "image_name": "unknown",
+        "floating_ip_pool": "{{ env `FACTORY_FLOATING_IP_POOL` }}",
+        "factory_network": "{{ env `FACTORY_NETWORK` }}",
+        "factory_security_group": "{{ env `FACTORY_SECURITY_GROUP` }}"
     },
     "builders": [
         {
             "type": "openstack",
             "ssh_username": "cloud",
+            "flavor": "16",
             "image_name": "{{ user `image_name` }}",
             "source_image": "{{ user `source_image` }}",
-            "security_groups": ["PING_SSH"],
-            "networks": ["{{ env `FACTORY_NETWORK` }}"],
-            "flavor": "16",
+            "security_groups": ["{{ user `factory_security_group` }}"],
+            "networks": ["{{ user `factory_network` }}"],
             "use_floating_ip": "true",
-            "floating_ip_pool": "{{ env `FACTORY_FLOATING_IP_POOL` }}"
+            "floating_ip_pool": "{{ user `floating_ip_pool` }}"
         }
     ],
     "provisioners": [
