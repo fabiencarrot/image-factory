@@ -2,7 +2,6 @@
     "variables": {
         "source_image": "unknown",
         "image_name": "unknown",
-        "factory_floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517",
         "factory_network": "{{ env `FACTORY_NETWORK` }}",
         "factory_security_group": "{{ env `FACTORY_SECURITY_GROUP` }}"
     },
@@ -15,7 +14,7 @@
             "source_image": "{{ user `source_image` }}",
             "security_groups": "{{ user `factory_security_group` }}",
             "networks": "{{ user `factory_network` }}",
-            "floating_ip_pool": "{{ user `factory_floating_ip_pool` }}",
+            "floating_ip_pool": "6ea98324-0f14-49f6-97c0-885d1b8dc517",
             "use_floating_ip": "true"
         }
     ],
