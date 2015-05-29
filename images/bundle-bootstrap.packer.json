@@ -3,7 +3,7 @@
         "source_image": "unknown",
         "image_name": "unknown",
         "floating_ip_pool": "{{ env `FACTORY_FLOATING_IP_POOL` }}",
-        "factory_network": "{{ env `FACTORY_NETWORK` }}",
+        "factory_network": "17decd89-56a2-4729-8bd6-453ebaa51860",
         "factory_security_group": "{{ env `FACTORY_SECURITY_GROUP` }}"
     },
     "builders": [

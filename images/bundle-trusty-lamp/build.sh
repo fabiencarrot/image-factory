@@ -18,7 +18,7 @@ if [ "$?" -ne "0" ]; then
     exit 1
 fi
 
-PACKER_FILE="../bundle-bootstrap.packer.json"
+PACKER_FILE="$SELF_PATH/../bundle-bootstrap.packer.json"
 BUILDMARK="$(date +%Y-%m-%d-%H%M)"
 IMG_NAME="$BASENAME-$BUILDMARK"
 TMP_IMG_NAME="$IMG_NAME-tmp"
