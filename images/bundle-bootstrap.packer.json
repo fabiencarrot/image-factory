@@ -2,8 +2,8 @@
     "variables": {
         "source_image": "unknown",
         "image_name": "unknown",
-        "floating_ip_pool": "{{ env `FACTORY_FLOATING_IP_POOL` }}",
-        "factory_network": "17decd89-56a2-4729-8bd6-453ebaa51860",
+        "factory_floating_ip_pool": "{{ env `FACTORY_FLOATING_IP_POOL` }}",
+        "factory_network": "{{ env `FACTORY_NETWORK` }}",
         "factory_security_group": "{{ env `FACTORY_SECURITY_GROUP` }}"
     },
     "builders": [
@@ -16,7 +16,7 @@
             "security_groups": "{{ user `factory_security_group` }}",
             "networks": "{{ user `factory_network` }}",
             "use_floating_ip": "true",
-            "floating_ip_pool": "{{ user `floating_ip_pool` }}"
+            "floating_ip_pool": "{{ user `factory_floating_ip_pool` }}"
         }
     ],
     "provisioners": [
@@ -28,9 +28,7 @@
         },
         {
             "type": "shell",
-            "inline": [
-                "sudo sync"
-            ]
+            "inline": [ "sudo sync" ]
         }
     ]
 }
