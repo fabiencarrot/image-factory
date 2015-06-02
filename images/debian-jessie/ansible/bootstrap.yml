@@ -3,12 +3,6 @@
   sudo: true
 
   tasks:
-    - name: apt-get update & upgrade
-      apt:
-        upgrade=full
-        update_cache=yes
-        cache_valid_time=3600
-
     - name: packages installed
       apt:
         pkg={{ item }}
@@ -18,6 +12,7 @@
         - curl
         - bzip2
         - unzip
+        - python-os-cloud-config
 
     - name: debian user removed
       user:

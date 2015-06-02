@@ -26,7 +26,7 @@ guestmount -a $IMG -i $TMP_DIR
 sed -i "s#name: debian#name: cloud#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#gecos: Debian#gecos: Cloud user#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#debian#cloud#" $TMP_DIR/etc/sudoers.d/debian-cloud-init
-sed -i "#ed25519#d" $TMP_DIR/etc/ssh/sshd_config
+sed -i "/ed25519/d" $TMP_DIR/etc/ssh/sshd_config
 sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
 
 guestunmount $TMP_DIR
