@@ -13,9 +13,11 @@ IMG_URL=http://cdimage.debian.org/cdimage/openstack/current/$IMG
 
 TMP_DIR=debian-jessie-guest
 
-if [ ! -f "$IMG" ]; then
-    wget $IMG_URL
+if [ -f "$IMG" ]; then
+    rm $IMG
 fi
+
+wget -q $IMG_URL
 
 if [ ! -d "$TMP_DIR" ]; then
     mkdir $TMP_DIR
