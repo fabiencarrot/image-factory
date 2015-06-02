@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. ../../factory-env.sh
+
 LOG="./build.debug.log"
 BASENAME="ubuntu-14.04"
 TENANT_ID="772be1ffb32e42a28ac8e0205c0b0b90"
