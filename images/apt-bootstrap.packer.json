@@ -13,7 +13,7 @@
             "flavor": "16",
             "image_name": "{{ user `image_name` }}",
             "source_image": "{{ user `source_image` }}",
-            "security_groups": ["{{ user `factory_security_group` }}"],
+            "security_groups": "{{ user `factory_security_group` }}",
             "networks": "{{ user `factory_network` }}",
             "use_floating_ip": "true",
             "floating_ip_pool": "{{ user `floating_ip_pool` }}"
