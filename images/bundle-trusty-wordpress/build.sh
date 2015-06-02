@@ -37,6 +37,7 @@ glance image-update \
     --min-disk 10 \
     --purge-props $IMG_ID
 
+
 echo "======= Cleaning unassociated floating ips"
 
 FREE_FLOATING_IP="$(neutron floatingip-list | grep -v "+" | grep -v "id" | tr -d " " | grep -v -E "^\|.+\|.+\|.+\|.+\|$" | cut -d "|" -f 2)"
@@ -58,4 +59,5 @@ fi
 sed "s/\\\$IMAGE\\\$/$IMG_ID/g" $SELF_PATH/heat/$BASENAME.heat.yml > $SELF_PATH/target/$BASENAME.heat.yml
 
 echo "======= Image detail"
+
 glance image-show $IMG_ID

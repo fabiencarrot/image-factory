@@ -56,7 +56,7 @@ echo "======= Generating Heat template"
 if [ ! -d "$SELF_PATH/target" ]; then
     mkdir $SELF_PATH/target
 fi
-sed "s/\\\$IMAGE\\\$/$IMG_ID/g" $SELF_PATH/heat/bundle-trusty-lamp.heat.yml > $SELF_PATH/target/bundle-trusty-lamp.heat.yml
+sed "s/\\\$IMAGE\\\$/$IMG_ID/g" $SELF_PATH/heat/$BASENAME.heat.yml > $SELF_PATH/target/$BASENAME.heat.yml
 
 echo "======= Image detail"
 
