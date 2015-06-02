@@ -12,7 +12,6 @@
         - curl
         - bzip2
         - unzip
-        - python-os-cloud-config
 
     - name: debian user removed
       user:

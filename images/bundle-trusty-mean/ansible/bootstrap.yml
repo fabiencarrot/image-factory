@@ -52,10 +52,7 @@
         - angular
         - grunt-cli
         - forever
-        - yo
         - gulp
-        - generator-angular
-        - generator-meanjs
 
     - name: www-data group
       group:
