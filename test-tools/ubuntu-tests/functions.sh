@@ -89,11 +89,14 @@ boot_vm_with_port_and_userdata() {
     local flavor=$5
     local port=$6
     local user_data=$7
+
+    echo "BOOT_USERDATA = nova boot --flavor $flavor --image $image --key-name $key --security-groups $sg --nic port-id=$port --user-data $user_data $name"  >> $LOG_FILE 2>&1
+
     ID=`nova boot --flavor $flavor --image "$image" --key-name $key --security-groups $sg --nic port-id=$port --user-data $user_data $name | grep " id " | awk '{print $4}'`
+
     wait_vm_state $ID "ACTIVE"
 
     echo $ID
-
 }
 
 create_port() {
