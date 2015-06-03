@@ -64,4 +64,4 @@ glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | s
 
 glance image-show $IMG_ID
 
-URCHIN_IMG_ID=$IMG_ID $WORKSPACE/test-tools/urchin $WORKSPACE/test-tools/ubuntu-tests
+URCHIN_IMG_ID=$IMG_ID $WORKSPACE/test-tools/urchin -f "$WORKSPACE/test-tools/ubuntu-tests/Cloud init"
