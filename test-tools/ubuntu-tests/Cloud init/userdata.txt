@@ -1,6 +1,0 @@
-#cloud-config
-    packages:
-     - emacs
-
-    runcmd:
-     - [touch, /root/cloud-init.txt]
