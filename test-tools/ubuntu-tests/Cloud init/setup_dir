@@ -15,7 +15,7 @@ VM_ID=$(boot_vm_with_port_and_userdata $SG $VM_NAME $KEYPAIR $IMAGE $FLAVOR_STD 
 echo "Instance $VM_ID started"
 
 wait_to_boot $VM_ID $IP
-sleep 30
+
 echo "SG=$SG" > $TESTENV
 echo "VM_NAME=$VM_NAME" >> $TESTENV
 echo "VM_ID=$VM_ID" >> $TESTENV
