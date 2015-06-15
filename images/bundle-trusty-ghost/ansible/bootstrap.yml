@@ -24,6 +24,7 @@
         - curl
         - bzip2
         - nginx
+        - unzip
 
     - name: packages removed
       apt:
