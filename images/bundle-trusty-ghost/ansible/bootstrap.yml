@@ -68,6 +68,10 @@
       file:
         path="{{ item }}"
         state=directory
+        owner=www-data
+        group=www-data
+        recurse=yes
+        mode=0770
       with_items:
         - /var/lib/www
         - /var/run/www
@@ -82,18 +86,17 @@
         src=/tmp/ghost.zip
         dest=/var/lib/www
 
-    - name: installing ghost dependencies
+    - name: install
       sudo_user: root
       shell: cd /var/lib/www && sudo npm install --production
 
-    - name: exposed directory
+    - name: exposed directory ownership
       file:
         path="{{ item }}"
         state=directory
         owner=www-data
         group=www-data
         recurse=yes
-        mode=0770
       with_items:
         - /var/lib/www
         - /var/run/www
