@@ -88,7 +88,7 @@
 
     - name: install
       sudo_user: root
-      shell: cd /var/lib/www && npm install --production
+      shell: cd /var/lib/www && sudo npm install --production
 
     - name: nginx proxy
       copy:
