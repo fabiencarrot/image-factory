@@ -120,13 +120,13 @@
         group=root
         mode=0755
 
-    - name: nodejs service enabled
+    - name: nodejs running+enabled
       service:
         name=nodejs
         state=running
         enabled=yes
         
-    - name: restart nginx
+    - name: nginx is running+enabled
       service:
         name=nginx
         state=running
@@ -136,5 +136,5 @@
     - name: restart nginx
       service:
         name=nginx
-        state=running
+        state=restarted
         enabled=yes
