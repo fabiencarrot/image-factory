@@ -63,6 +63,17 @@
         - www-data
         - www-dev
 
+    - name: exposed directory
+      file:
+        path="{{ item }}"
+        state=directory
+        owner=www-data
+        group=www-data
+        recurse=yes
+        mode=0770
+      with_items:
+        - /var/lib/www
+        - /var/run/www
 
     - name: download ghost project
       get_url:
@@ -76,24 +87,6 @@
 
     - name: install
       shell: cd /var/lib/www && npm install --production
-
-
-
-
-
-
-
-    - name: exposed directory
-      file:
-        path="{{ item }}"
-        state=directory
-        owner=www-data
-        group=www-data
-        recurse=yes
-        mode=0770
-      with_items:
-        - /var/lib/www
-        - /var/run/www
 
     - name: nginx proxy
       copy:
