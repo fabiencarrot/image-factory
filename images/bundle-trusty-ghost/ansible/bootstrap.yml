@@ -87,6 +87,7 @@
         dest=/var/lib/www
 
     - name: install
+      sudo_user: root
       shell: cd /var/lib/www && npm install --production
 
     - name: nginx proxy
