@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BASENAME="bundle-trusty-ghost"
-CW_BUNDLE="MEAN"
+CW_BUNDLE="GHOST"
 
 if [ ! "$OS_TENANT_ID" ]; then
     echo "OS_TENANT_ID env variable is mandatory"
