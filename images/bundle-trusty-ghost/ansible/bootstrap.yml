@@ -25,6 +25,7 @@
         - bzip2
         - nginx
         - unzip
+        - libsqlite3-0
 
     - name: packages removed
       apt:
