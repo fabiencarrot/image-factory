@@ -7,7 +7,7 @@
       apt_repository:
         repo='deb http://ftp.us.debian.org/debian wheezy-backports main'
         state=present
-        
+
     - name: apt-get update & upgrade
       apt:
         upgrade=full
@@ -31,12 +31,12 @@
       apt:
         pkg=apache2
         state=absent
-        
+
     - name: check npm installation
       stat:
         path=/usr/bin/npm
       register: npm_binary
-      
+
     - name: npm is installed
       shell: curl -L --insecure https://www.npmjs.org/install.sh | bash
       when: not npm_binary.stat.exists
@@ -53,7 +53,7 @@
       group:
         name=www-data
         state=present
-        
+
     - name: www-data & dev user
       user:
         name="{{ item }}"
@@ -76,78 +76,4 @@
         - /var/lib/www
         - /var/run/www
 
-    - name: download ghost project
-      get_url:
-        url=https://ghost.org/zip/ghost-0.6.4.zip
-        dest=/tmp/ghost.zip
 
-    - name: expand ghost project in place
-      unarchive:
-        src=/tmp/ghost.zip
-        dest=/var/lib/www
-
-    - name: install
-      sudo_user: root
-      shell: cd /var/lib/www && sudo npm install --production
-
-    - name: exposed directory ownership
-      file:
-        path="{{ item }}"
-        state=directory
-        owner=www-data
-        group=www-data
-        recurse=yes
-      with_items:
-        - /var/lib/www
-        - /var/run/www
-
-    - name: nginx proxy
-      copy:
-        src=files/nginx.site
-        dest=/etc/nginx/sites-available/node_proxy
-        owner=root
-        group=root
-        mode=0644
-      notify: restart nginx
-      
-    - name: nginx default disabled
-      file:
-        path=/etc/nginx/sites-enabled/default
-        state=absent
-      notify: restart nginx
-      
-    - name: nginx proxy enabled
-      file:
-        src=/etc/nginx/sites-available/node_proxy
-        dest=/etc/nginx/sites-enabled/node_proxy
-        state=link
-        owner=root
-        group=root
-      notify: restart nginx
-        
-    - name: node init script
-      copy:
-        src=files/node.init.script
-        dest=/etc/init.d/nodejs
-        owner=root
-        group=root
-        mode=0755
-
-    - name: nodejs running+enabled
-      service:
-        name=nodejs
-        state=running
-        enabled=yes
-        
-    - name: nginx is running+enabled
-      service:
-        name=nginx
-        state=running
-        enabled=yes
-        
-  handlers:
-    - name: restart nginx
-      service:
-        name=nginx
-        state=restarted
-        enabled=yes
