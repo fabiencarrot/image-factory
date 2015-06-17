@@ -16,13 +16,13 @@
 # with your own name if you copy and modify this script.
 
 # Do NOT "set -e"
-set -x
+
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="NodeJS server"
 NAME=nodejs
 DAEMON=/usr/bin/forever
-DAEMON_ARGS="--sourceDir /var/lib/www --spinSleepTime 1000 --minUptime 1000 -p /var/run/www index.js"
+DAEMON_ARGS="--sourceDir /var/lib/www --spinSleepTime 1000 --minUptime 1000 -p /var/run/www node_modules/ep_etherpad-lite/node/server.js"
 PIDFILE=/var/run/nodejs.pid
 SCRIPTNAME=/etc/init.d/$NAME
 USER=www-data

@@ -6,7 +6,7 @@ server {
        index index.html index.htm;
 
        location / {
-                proxy_pass       http://localhost:2368;
+                proxy_pass       http://localhost:9001;
                 proxy_set_header Host      $host;
                 proxy_set_header X-Forwarded-For $remote_addr;
        }

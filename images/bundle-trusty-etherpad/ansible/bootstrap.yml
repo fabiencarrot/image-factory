@@ -26,6 +26,11 @@
         - nginx
         - unzip
         - libsqlite3-0
+        - gzip
+        - git
+        - libssl-dev
+        - pkg-config
+        - build-essential
 
     - name: packages removed
       apt:
@@ -77,3 +82,64 @@
         - /var/run/www
 
 
+    - name: install etherpad core
+      sudo_user: www-data
+      git:
+        repo=https://github.com/ether/etherpad-lite.git
+        dest=/var/lib/www
+        version=1.5.6
+
+    - name: install etherpad dependencies
+      sudo_user: www-data
+      shell: /var/lib/www/bin/installDeps.sh
+
+    - name: nginx proxy
+      copy:
+        src=files/nginx.site
+        dest=/etc/nginx/sites-available/node_proxy
+        owner=root
+        group=root
+        mode=0644
+      notify: restart nginx
+
+    - name: nginx default disabled
+      file:
+        path=/etc/nginx/sites-enabled/default
+        state=absent
+      notify: restart nginx
+
+    - name: nginx proxy enabled
+      file:
+        src=/etc/nginx/sites-available/node_proxy
+        dest=/etc/nginx/sites-enabled/node_proxy
+        state=link
+        owner=root
+        group=root
+      notify: restart nginx
+
+    - name: node init script
+      copy:
+        src=files/node.init.script
+        dest=/etc/init.d/nodejs
+        owner=root
+        group=root
+        mode=0755
+
+    - name: nodejs running+enabled
+      service:
+        name=nodejs
+        state=running
+        enabled=yes
+
+    - name: nginx is running+enabled
+      service:
+        name=nginx
+        state=running
+        enabled=yes
+
+  handlers:
+    - name: restart nginx
+      service:
+        name=nginx
+        state=restarted
+        enabled=yes
