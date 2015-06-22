@@ -25,7 +25,7 @@
                 "sudo apt-get update",
                 "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y",
                 "sudo DEBIAN_FRONTEND=noninteractive apt-get install aptitude git python-dev -y",
-                "sudo apt-get remove python-pip --purge",
+                "sudo apt-get remove python-pip --purge -y",
                 "sudo easy_install -U pip",
                 "sudo ln -s /usr/local/bin/pip /usr/bin/pip",
                 "sudo pip install ansible"
