@@ -8,10 +8,10 @@ BUILDMARK="$(date +%Y-%m-%d-%H%M)"
 IMG_NAME="$BASENAME-$BUILDMARK"
 TMP_IMG_NAME="$IMG_NAME-tmp"
 
-IMG=debian-8.0.0-openstack-amd64.qcow2
-IMG_URL=http://cdimage.debian.org/cdimage/openstack/current/$IMG
+IMG=CentOS-7-x86_64-GenericCloud.qcow2
+IMG_URL=http://cloud.centos.org/centos/7/images/$IMG
 
-TMP_DIR=debian-jessie-guest
+TMP_DIR=centos-guest
 
 if [ -f "$IMG" ]; then
     rm $IMG
@@ -60,7 +60,6 @@ done
 echo "======= Cleaning too old images"
 
 glance image-list | grep $BASENAME | tr "|" " " | tr -s " " |cut -d " " -f 3 | sort -r | awk 'NR>5' | xargs glance image-delete
-
 
 glance image-show $IMG_ID
 
