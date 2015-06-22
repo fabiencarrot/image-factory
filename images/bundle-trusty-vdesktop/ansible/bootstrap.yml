@@ -49,7 +49,7 @@
         - python-heatclient
 
     - name: cw group present
-      groups: name=cloudwatt state=present
+      group: name=cloudwatt state=present
 
     - name: cw user present
       user:
