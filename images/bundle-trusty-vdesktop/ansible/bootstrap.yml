@@ -133,12 +133,11 @@
       locale_gen: name=fr_FR.UTF-8 state=present
 
     - name: fine tuning configuration
-      shell: "{{ item }}"
-      with_items:
-        - "sed -i \"s/. \/etc\/X11\/Xsession/. \/usr\/bin\/startlxde/\" /etc/xrdp/startwm.sh"
-        - "sed -i \"s/gnome/Humanity-Dark/\" /etc/xdg/lxsession/LXDE/desktop.conf"
-        - "echo \"@setxkbmap fr\" >> /etc/xdg/lxsession/LXDE/autostart"
-        - "sed -i \"s/LANG=\\\"en_US.UTF-8\\\"/LANG=\\\"fr_FR.UTF-8\\\"/g\" /etc/default/locale"
+      shell: sed -i "s/. \\/etc\/X11\/Xsession/. \/usr\/bin\/startlxde/" /etc/xrdp/startwm.sh
+
+    - shell: sed -i "s/gnome/Humanity-Dark/" /etc/xdg/lxsession/LXDE/desktop.conf
+    - shell: echo "@setxkbmap fr" >> /etc/xdg/lxsession/LXDE/autostart
+    - shell: sed -i "s/LANG=\"en_US.UTF-8\"/LANG=\"fr_FR.UTF-8\"/g" /etc/default/locale
 
     - name: set locale
       command: /usr/sbin/update-locale LANG=fr_FR.UTF-8 LC_ALL=fr_FR.UTF-8
