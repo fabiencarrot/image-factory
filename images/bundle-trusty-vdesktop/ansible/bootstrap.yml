@@ -138,16 +138,11 @@
     - shell: sed -i "s/gnome/Humanity-Dark/" /etc/xdg/lxsession/LXDE/desktop.conf
     - shell: echo "@setxkbmap fr" >> /etc/xdg/lxsession/LXDE/autostart
     - shell: sed -i "s/LANG=\"en_US.UTF-8\"/LANG=\"fr_FR.UTF-8\"/g" /etc/default/locale
+    - shell: timedatectl set-timezone Europe/Paris
+      notify: update tzdata
 
     - name: set locale
       command: /usr/sbin/update-locale LANG=fr_FR.UTF-8 LC_ALL=fr_FR.UTF-8
-
-    - name: set /etc/localtime
-      file: src=/usr/share/zoneinfo/Europe/Paris dest=/etc/localtime state=link
-
-    - name: set /etc/timezone
-      template: src=templates/etc/timezone dest=/etc/timezone
-      notify: update tzdata
 
     - name: xrdp restarted
       service:
