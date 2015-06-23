@@ -120,6 +120,7 @@
       get_url:
         url="https://storage.fr1.cloudwatt.com/v1/AUTH_ca4434bceccb44eaa7e53be4bdbae63d/images/{{ item.src }}"
         dest="{{ item.dest }}"
+        force=yes
       with_items:
         - { src: "cloudwatt-wallpaper.jpg", dest: "/usr/share/lxde/wallpapers/lxde_blue.jpg" }
         - { src: "cw-icon-api.png", dest: "/home/cloudwatt/icons/cw-icon-api.png" }
