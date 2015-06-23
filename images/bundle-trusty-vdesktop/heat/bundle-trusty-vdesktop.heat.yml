@@ -5,6 +5,12 @@ description: Virtual Desktop stack
 
 
 parameters:
+  cw_user_password:
+    description: Password for the user named cloudwatt
+    label: cloudwatt user password
+    type: string
+    hidden: true
+
   keypair_name:
     description: Keypair to inject in instance
     label: SSH Keypair
@@ -66,6 +72,19 @@ resources:
         - network: { get_resource: network }
       security_groups:
         - { get_resource: security_group }
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            mkdir /etc/ansible
+            echo "[local]" >> /etc/ansible/hosts
+            echo "127.0.0.1 ansible_connection=local" >> /etc/ansible/hosts
+            cd /root && git clone https://github.com/cloudwatt/applications.git cw-app
+            ansible-playbook /root/cw-app/bundle-trusty-vdesktop/seed-user.yml --extra-vars "cw_pass=$(echo "$pass" | mkpasswd --method=SHA-512 -s)"
+            rm -rf /root/cw-app
+          params:
+            $pass: { get_param: cw_user_password }
 
   floating_ip_link:
     type: OS::Nova::FloatingIPAssociation

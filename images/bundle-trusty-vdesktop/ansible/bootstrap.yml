@@ -33,6 +33,7 @@
         - build-essential
         - libxslt1-dev
         - libxml2-dev
+        - whois
 
     - name: python packages installed
       pip:
