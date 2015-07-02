@@ -6,8 +6,14 @@
 export BASE_IMG_UBUNTU_TRUSTY="ae3082cb-fac1-46b1-97aa-507aaa8f184f"
 
 # Network ID to use for VM deployment during build
-export FACTORY_NETWORK="17decd89-56a2-4729-8bd6-453ebaa51860"
-export FACTORY_SECURITY_GROUP="FACTORY-sg-zh6nltybm7fy"
+
+if [ ! "$FACTORY_NETWORK" ]; then
+  export FACTORY_NETWORK="17decd89-56a2-4729-8bd6-453ebaa51860"
+fi
+
+if [ ! "$FACTORY_SECURITY_GROUP" ]; then
+  export FACTORY_SECURITY_GROUP="FACTORY-sg-zh6nltybm7fy"
+fi
 
 # Floating IP pool to use
 # packer openstack builder does not interpolate var for ip_pool
