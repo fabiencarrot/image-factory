@@ -38,7 +38,7 @@
         name=jenkins
         groups=kvm
         append=yes
-        
+
     - name: common aliases
       copy:
         dest=/etc/profile.d/aliases.sh
@@ -58,8 +58,8 @@
     - name: packer download
       get_url:
         dest=/tmp/packer.zip
-        sha256sum=8fab291c8cc988bd0004195677924ab6846aee5800b6c8696d71d33456701ef6
-        url=http://dl.bintray.com/mitchellh/packer/packer_0.7.5_linux_amd64.zip
+        sha256sum=b85451aa84f20264829916174267ae1642aec434e9a66c382d41e6c595be59d4
+        url=http://dl.bintray.com/mitchellh/packer/packer_0.8.1_linux_amd64.zip
       notify: unzip packer
 
     - name: default sh is bash
@@ -85,7 +85,7 @@
         name=jenkins
         state=restarted
         enabled=yes
-        
+
     - name: unzip packer
       unarchive:
         dest=/usr/local/bin
