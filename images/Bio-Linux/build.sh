@@ -20,7 +20,7 @@ fi
 
 wget -q $IMG_URL
 
-qemu-img convert -f raw -O qcow2 $IMG ${IMG%.iso}.qcow2
+qemu-img convert -f raw -O qcow2 ${IMG}.iso ${IMG}.qcow2
 
 if [ ! -d "$TMP_DIR" ]; then
     mkdir $TMP_DIR
