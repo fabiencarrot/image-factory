@@ -2,22 +2,25 @@
 
 . ../../factory-env.sh
 
-BASENAME="debian-jessie"
-TENANT_ID="772be1ffb32e42a28ac8e0205c0b0b90"
+BASENAME="biolibux-8"
+TENANT_ID="1fa0448c2d874233a8329554ea04d87d"
 BUILDMARK="$(date +%Y-%m-%d-%H%M)"
 IMG_NAME="$BASENAME-$BUILDMARK"
 TMP_IMG_NAME="$IMG_NAME-tmp"
 
-IMG=CentOS-7-x86_64-GenericCloud.qcow2
-IMG_URL=http://cloud.centos.org/centos/7/images/$IMG
+IMG_URL=http://nebc.nerc.ac.uk/downloads/bio-linux-8-latest.iso
+IMG=$(basename ${IMG_URL%.iso})
 
-TMP_DIR=centos-guest
+
+TMP_DIR=biolinux-guest
 
 if [ -f "$IMG" ]; then
     rm $IMG
 fi
 
 wget -q $IMG_URL
+
+qemu-img convert -f raw -O qcow2 $IMG ${IMG%.iso}.qcow2
 
 if [ ! -d "$TMP_DIR" ]; then
     mkdir $TMP_DIR
