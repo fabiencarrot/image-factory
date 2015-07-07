@@ -14,19 +14,19 @@ IMG=$(basename ${IMG_URL%.iso})
 
 TMP_DIR=biolinux-guest
 
-if [ -f "$IMG" ]; then
-    rm $IMG
-fi
+# if [ -f "$IMG" ]; then
+#     rm $IMG
+# fi
 
-#wget -q $IMG_URL
+# wget -q $IMG_URL
 
-qemu-img convert -f raw -O qcow2 ${IMG}.iso ${IMG}.qcow2
+# qemu-img convert -f raw -O qcow2 ${IMG}.iso ${IMG}.qcow2
 
 if [ ! -d "$TMP_DIR" ]; then
     mkdir $TMP_DIR
 fi
 
-guestmount -a $IMG -i $TMP_DIR
+guestmount -a $IMG.qcow2 -i $TMP_DIR
 
 sed -i "s#name: debian#name: cloud#" $TMP_DIR/etc/cloud/cloud.cfg
 sed -i "s#gecos: Debian#gecos: Cloud user#" $TMP_DIR/etc/cloud/cloud.cfg
