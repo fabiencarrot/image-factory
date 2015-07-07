@@ -18,7 +18,7 @@ if [ -f "$IMG" ]; then
     rm $IMG
 fi
 
-wget -q $IMG_URL
+#wget -q $IMG_URL
 
 qemu-img convert -f raw -O qcow2 ${IMG}.iso ${IMG}.qcow2
 
