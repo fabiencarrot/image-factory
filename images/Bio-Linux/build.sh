@@ -37,7 +37,7 @@ sed -i "/gecos/a \ \ \ \ \ shell: \/bin\/bash" $TMP_DIR/etc/cloud/cloud.cfg
 guestunmount $TMP_DIR
 
 glance image-create \
-       --file $IMG \
+       --file $IMG.qcow2 \
        --disk-format qcow2 \
        --container-format bare \
        --name "$TMP_IMG_NAME"
